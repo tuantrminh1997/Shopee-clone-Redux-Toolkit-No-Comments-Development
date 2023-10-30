@@ -170,10 +170,10 @@ export default function ProductItemDetail() {
 				/>
 			)}
 			{productItemDetailLoading && <SkeletonLoadingProductInformation />}
-			{productItemDetail && forwardProductImage && !productItemDetailLoading && (
+			{productItemDetail && !productItemDetailLoading && (
 				<div className='flex justify-between w-full bg-white rounded-sm lg:flex-col'>
 					<ProductItemImages
-						productItemDetailDatasImage={forwardProductImage}
+						productItemDetailDatasImage={forwardProductImage as string}
 						productItemDetailDatasImages={productItemDetail.images}
 						productItemName={productItemDetail.name as string}
 					/>
