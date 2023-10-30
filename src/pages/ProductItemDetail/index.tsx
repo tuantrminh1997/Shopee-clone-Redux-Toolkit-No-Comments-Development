@@ -14,7 +14,7 @@ import { convert } from "html-to-text";
 // utils:
 import { getIdFromNameId } from "src/utils";
 // types:
-import { QueryConfigType, RootState } from "src/types";
+import { ProductItemSuccessResponse, QueryConfigType, RootState } from "src/types";
 // private components:
 import {
 	ProductItemInformation,
@@ -170,15 +170,15 @@ export default function ProductItemDetail() {
 				/>
 			)}
 			{productItemDetailLoading && <SkeletonLoadingProductInformation />}
-			{productItemDetail && !productItemDetailLoading && (
+			{!productItemDetailLoading && (
 				<div className='flex justify-between w-full bg-white rounded-sm lg:flex-col'>
 					<ProductItemImages
 						productItemDetailDatasImage={forwardProductImage as string}
-						productItemDetailDatasImages={productItemDetail.images}
-						productItemName={productItemDetail.name as string}
+						productItemDetailDatasImages={productItemDetail?.images as string[]}
+						productItemName={productItemDetail?.name as string}
 					/>
 					<ProductItemInformation
-						productItemDetailData={productItemDetail}
+						productItemDetailData={productItemDetail as ProductItemSuccessResponse}
 						setNumberOfProducts={setNumberOfProducts}
 						handleSetNumberOfProducts={handleSetNumberOfProducts}
 						numberOfProducts={numberOfProducts}
