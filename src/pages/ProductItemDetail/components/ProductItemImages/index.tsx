@@ -19,7 +19,7 @@ export default function ProductItemImages({
 	const { totalImageShownPositions } = productItemDetailInformationAttributes;
 	// Tổng vị trí các ảnh trong sliders
 	const imagesSliderPositions =
-		productItemDetailDatasImages.length > totalImageShownPositions ? totalImageShownPositions : productItemDetailDatasImages.length;
+		productItemDetailDatasImages?.length > totalImageShownPositions ? totalImageShownPositions : productItemDetailDatasImages?.length;
 
 	// Mục đích để lấy được thuộc tính width
 	const imageRef = useRef<HTMLImageElement>(null);
@@ -33,7 +33,7 @@ export default function ProductItemImages({
 
 	const getProductItemImagesRender = () => {
 		// Dùng hàm slice(chỉ số bắt đầu, chỉ số kết thúc)
-		const productItemImagesRender = productItemDetailDatasImages.slice(firstIndex, finalIndex);
+		const productItemImagesRender = productItemDetailDatasImages?.slice(firstIndex, finalIndex);
 		return productItemImagesRender;
 	};
 
@@ -53,7 +53,7 @@ export default function ProductItemImages({
 
 	// Method quản lý chức năng render ảnh slider
 	const handleRenderImagesSlider: () => JSX.Element[] = () => {
-		return getProductItemImagesRender().map((productItemDetailImageSrc, index) => (
+		return getProductItemImagesRender()?.map((productItemDetailImageSrc, index) => (
 			<img
 				key={index}
 				src={productItemDetailImageSrc}

@@ -20,14 +20,14 @@ export default function ProductItemInformation({
 		<div className='flex flex-col basis-[55%] relative lg:px-6 lg:min-h-[500px] lg:w-full'>
 			{/* Tên sản phẩm */}
 			<ProductItemTitle
-				productItemName={productItemDetailData.name}
-				productItemRating={productItemDetailData.rating}
-				productItemView={productItemDetailData.view}
-				productItemSold={productItemDetailData.sold}
+				productItemName={productItemDetailData?.name}
+				productItemRating={productItemDetailData?.rating}
+				productItemView={productItemDetailData?.view}
+				productItemSold={productItemDetailData?.sold}
 				viewTitle={t("productTitleArea.views")}
 				soldTitle={t("productTitleArea.sold")}
 			/>
-			<ProductItemPrices productItemOldPrice={productItemDetailData.price_before_discount} productItemNewPrice={productItemDetailData.price} />
+			<ProductItemPrices productItemOldPrice={productItemDetailData?.price_before_discount} productItemNewPrice={productItemDetailData?.price} />
 			<TransportationCost
 				protectionTitle={t("productInformations.protection")}
 				shippingTitle={t("productInformations.shipping")}
@@ -38,7 +38,7 @@ export default function ProductItemInformation({
 				onDecreaseQuantity={handleSetNumberOfProducts as (value: number) => void}
 				onTypeQuantity={handleSetNumberOfProducts as (value: number) => void}
 				value={numberOfProducts as number}
-				maxQuantityAvailable={productItemDetailData.quantity as number}
+				maxQuantityAvailable={productItemDetailData?.quantity as number}
 				itemNameId={itemNameId as string}
 				piecesAvailableTitlte={t("productInformations.pieces available") as string}
 				quantityControllerTitle={t("productInformations.quantity") as string}
