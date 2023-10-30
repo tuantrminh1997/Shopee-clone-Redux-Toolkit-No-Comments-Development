@@ -12,14 +12,8 @@ export default function PopoverOption({
 	href, // ?
 	onclick, // ?
 }: PopoverOptionPropsType) {
-	// Handle: ContainerElement nếu truyền Props to -> trở thành thẻ Link của React-Router-dom
-	//        -> truyền href -> trở thành thẻ a
-	//        -> không truyền to và href -> mặc định là thẻ button
-
-	const redirectOptionProps: Omit<
-		PopoverOptionPropsType,
-		"ContainerElement" | "InnerElement" | "containerClassName" | "innerClassName" | "title"
-	> = {};
+	const redirectOptionProps: Omit<PopoverOptionPropsType, "ContainerElement" | "InnerElement" | "containerClassName" | "innerClassName" | "title"> =
+		{};
 
 	if (to) {
 		redirectOptionProps.to = to;

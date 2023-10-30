@@ -10,22 +10,18 @@ export default function RelatedInformations({ productItemDescription, similarPro
 	return (
 		<div className='flex justify-between lg:flex-col w-full'>
 			<div className='flex flex-col mt-[15px] basis-[80%] lg:basis-[100%] lg:order-1'>
-				{/* Thông tin chi tiết của sản phẩm */}
 				<ProductItemDetailInformation
 					productItemDescription={productItemDescription as string}
 					productDescription={t("related informations.product description")}
 					showMoreTitle={t("productInformations.show more")}
 					collapseTitle={t("productInformations.collapse")}
 				/>
-				{/* Top sản phẩm bán chạy hiển thị ngang trên màn hình Responsive */}
 				<TopSellingProductListLgResponsive
 					similarSoldByProductList={similarSoldByProductList}
 					topPicksTitle={t("related informations.top picks from shop")}
 				/>
-				{/* Các sản phẩm cùng loại - Có thể bạn cũng thích  */}
 				<SimilarProductList similarProductList={similarProductList} youMayAlsoLikeTitle={t("related informations.you may also like")} />
 			</div>
-			{/* Top sản phẩm bán chạy trên màn hình máy tính */}
 			<TopSellingProductList similarSoldByProductList={similarSoldByProductList} topPicksTitle={t("related informations.top picks from shop")} />
 		</div>
 	);

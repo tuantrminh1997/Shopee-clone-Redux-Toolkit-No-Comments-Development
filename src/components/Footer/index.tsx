@@ -11,17 +11,13 @@ export default function Footer() {
 					</div>
 					<p className='col-span-2 lg:row-start-2 lg:text-center'>
 						{t("topFooter.Country & Region")}:
-						{t(
-							"topFooter.Singapore Indonesia Taiwan Thailand Malaysia Vietnam Philippines Brazil México Colombia Chile",
-						)}
+						{t("topFooter.Singapore Indonesia Taiwan Thailand Malaysia Vietnam Philippines Brazil México Colombia Chile")}
 					</p>
 				</div>
 				<div className='text-center text-sm mt-10'>
 					<p>{t("bottomContent.Shopee Company Limited")}</p>
 					<p className='mt-2'>
-						{t(
-							"bottomContent.Floors 4-5-6, Capital Place Building, No. 29, Lieu Giai Street, Ngoc Khanh ward, Ba Dinh District, Hanoi, Vietnam",
-						)}
+						{t("bottomContent.Floors 4-5-6, Capital Place Building, No. 29, Lieu Giai Street, Ngoc Khanh ward, Ba Dinh District, Hanoi, Vietnam")}
 					</p>
 					<p className='mt-2'>{t("bottomContent.Person in charge of information management - Nguyen Duc Tri")}</p>
 					<p className='mt-2'>{t("bottomContent.Business Registration Certificate No - 0106773786")}</p>

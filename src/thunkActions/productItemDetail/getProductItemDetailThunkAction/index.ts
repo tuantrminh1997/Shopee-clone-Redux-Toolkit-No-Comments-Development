@@ -8,9 +8,6 @@ const getProductItemDetailThunkAction = createAsyncThunk("productItemDetail/getP
 	const response = await http.get<SuccessResponseApi<ProductItemSuccessResponse>>(`${productsBasePathURL}/${productItemId}`, {
 		signal,
 	});
-	// return về giá trị gì
-	// -> callback này trở thành Promise.resolve(giá trị đó)
-	// -> được bắt ở fulFilled của slice
 	return response.data;
 });
 export default getProductItemDetailThunkAction;

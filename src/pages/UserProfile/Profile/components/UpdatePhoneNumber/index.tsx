@@ -28,17 +28,13 @@ export default function UpdatePhoneNumber({ phoneNumberFieldTitle }: UpdatePhone
 					render={({ field }) => (
 						<InputNumber
 							placeholder='Số điện thoại...'
-							// elements:
 							ContainerElement={Fragment as React.ElementType}
 							ErrorContainerElement={"p" as React.ElementType}
-							// classNames
 							classNameInput={`w-full p-3 border rounded-sm outline-none profileInputBoxShadow ${
 								formErrors?.phone ? "border-[#ff424f] bg-[#fff9fa]" : "border-[rgba(0,0,0,.14)]"
 							}`}
 							classNameError='text-sm text-[#ff424f] min-h-[20px] mt-1'
-							// message error
 							errorMessage={formErrors?.phone?.message as string}
-							// field props
 							onChange={field.onChange}
 							value={field.value}
 						/>

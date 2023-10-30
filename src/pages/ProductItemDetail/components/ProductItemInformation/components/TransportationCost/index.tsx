@@ -7,11 +7,7 @@ interface TransportationCostPropsType {
 	freeShippingTitle: string;
 }
 
-export default function TransportationCost({
-	freeShippingTitle,
-	shippingTitle,
-	protectionTitle,
-}: TransportationCostPropsType) {
+export default function TransportationCost({ freeShippingTitle, shippingTitle, protectionTitle }: TransportationCostPropsType) {
 	return (
 		<div className='flex flex-col text-sm text-[#757575] mb-8'>
 			<div className='flex items-center justify-start mb-4'>

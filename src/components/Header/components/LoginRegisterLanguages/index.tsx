@@ -22,11 +22,7 @@ export default function LoginRegisterLanguages({ isLoggedIn, userProfile, handle
 	// react i18n:
 	const { i18n } = useTranslation();
 	const { t } = useTranslation("header");
-	// ép kiểu cho biến as string
-	// as string chưa đủ chặt chẽ ta ép cho nó là 1 trong các giá trị của thuộc tính của object locales { vietnamese: "tiếng việt", english: "english", }
 	const currentLanguage = locales[i18n.language as keyof typeof locales];
-	// Method quản lý chức năng đa ngôn ngữ:
-	// ép kiểu targetedLanguage là 1 trong các giá trị của thuộc tính của object locales
 	const handleChangeLanguage: (targetedLanguage: keyof typeof locales) => void = (languageSelectOption: keyof typeof locales) => {
 		i18n.changeLanguage(languageSelectOption as keyof typeof locales);
 	};
@@ -44,21 +40,16 @@ export default function LoginRegisterLanguages({ isLoggedIn, userProfile, handle
 	] as const;
 	return (
 		<div className='flex h-[34px] justify-end lowerMobile:justify-between xl:mr-4 lowerMobile:h-[40%] lowMobile:h-[50%]'>
-			{/* Popover ngôn ngữ */}
 			<Popover
 				hoverTarget={
 					<PopoverHoverTarget
 						leftIcon={<EarthIcon />}
-						// Handle vấn đề Load title ngôn ngữ đã target lên UI
-						// -> sử dụng currentLanguage từ i18n
 						title={<span className='mx-1'>{currentLanguage}</span>}
 						rightIcon={<ArrowDownIcon />}
 						containerClassName='flex xl:h-full xl:text-xl lowMobile:text-lg lowerMobile:text-sm items-center text-[13px] capitalize '
 					/>
 				}
-				// hoverTargetClassName = className của item quản lý popover
 				hoverTargetclassName={"flex items-center text-sm  py-[7px] px-[10px] hover:text-[hsla(0,0%,100%,.7)] cursor-pointer"}
-				// popoverContent = item chứa nội dung Popover
 				popoverContent={
 					<div className='popoverContentLanguagesContainerStyle'>
 						<div className='flex flex-col'>
@@ -81,11 +72,8 @@ export default function LoginRegisterLanguages({ isLoggedIn, userProfile, handle
 						</div>
 					</div>
 				}
-				// className styles cho arrow: ta truyền styles phần căn chỉnh vị trí
 				popoverArrowClassName='absolute translate-y-[-80%]'
 			/>
-			{/* Popover Tài Khoản */}
-			{/* Đã đăng nhập */}
 			{isLoggedIn && (
 				<Popover
 					hoverTarget={
@@ -124,11 +112,9 @@ export default function LoginRegisterLanguages({ isLoggedIn, userProfile, handle
 							</div>
 						</div>
 					}
-					// className styles cho arrow: ta truyền styles phần căn chỉnh vị trí
 					popoverArrowClassName='absolute translate-y-[-80%]'
 				/>
 			)}
-			{/* Chưa đăng nhập */}
 			{!isLoggedIn && (
 				<div className='flex text-[13px] text-white items-center justify-between'>
 					{loginRegisterConstants.map((loginRegisterConstant) => {

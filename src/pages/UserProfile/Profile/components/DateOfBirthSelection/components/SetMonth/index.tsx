@@ -12,18 +12,12 @@ export default memo(function SetMonth({ handleChangeDateSelection, month }: SetD
 	const divRef = useRef(null);
 	const [toggleSelectMonth, setToggleSelectMonth] = useState<boolean>(false);
 	useEffect(() => {
-		// Thêm một sự kiện click toàn cục để kiểm tra sự kiện click ra ngoài
 		const handleClickOutside = (event: any) => {
 			if (divRef.current && (!divRef.current as any).contains(event.target)) {
-				// Kiểm tra xem event.target không nằm trong phần tử divRef.current
 				setToggleSelectMonth(false);
 			}
 		};
-
-		// Đăng ký sự kiện click toàn cục khi component được mount
 		document.addEventListener("click", handleClickOutside);
-
-		// Hủy đăng ký sự kiện khi component bị unmount
 		return () => {
 			document.removeEventListener("click", handleClickOutside);
 		};

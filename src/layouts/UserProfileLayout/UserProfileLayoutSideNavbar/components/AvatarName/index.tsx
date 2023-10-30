@@ -18,11 +18,7 @@ export default memo(function AvatarName({ userProfile }: AvatarNamePropsType) {
 	const { t } = useTranslation("user");
 	return (
 		<div className='flex py-4 border-b border-[#efefef]'>
-			<Button
-				className={"w-[50px] h-[50px] shrink-0 relative"}
-				childrenClassName={"absolute top-0 left-0"}
-				to={profilePathUrl}
-			>
+			<Button className={"w-[50px] h-[50px] shrink-0 relative"} childrenClassName={"absolute top-0 left-0"} to={profilePathUrl}>
 				<img className='rounded-[50%] w-7 h-7' src={getUserAvatarUrl(userProfile?.avatar as string)} alt='userAvatar' />
 			</Button>
 			<div className='text-sm'>

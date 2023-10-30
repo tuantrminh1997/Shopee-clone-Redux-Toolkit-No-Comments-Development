@@ -4,10 +4,7 @@ import { memo } from "react";
 import { formatCurrency } from "src/utils";
 import { ProductItemPricesPropsType } from "src/types";
 
-export default memo(function OldPriceNewPrice({
-	productItemOldPrice,
-	productItemNewPrice,
-}: ProductItemPricesPropsType) {
+export default memo(function OldPriceNewPrice({ productItemOldPrice, productItemNewPrice }: ProductItemPricesPropsType) {
 	return (
 		<div className='flex justify-start items-start text-[#ee4d2e] text-xl basis-[50%]'>
 			<div className='flex items-start text-[#929292] font-thin text-[22px] line-through mr-3'>

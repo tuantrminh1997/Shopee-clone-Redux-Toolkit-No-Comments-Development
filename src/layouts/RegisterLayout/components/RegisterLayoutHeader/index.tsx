@@ -16,9 +16,7 @@ export default function RegisterLayoutHeader() {
 					<Link to='/'>
 						<ShopeeLogo fill='#ee4d2d' width='123px' height='40px' />
 					</Link>
-					<div className='ml-5 text-xl lg:text-2xl capitalize'>
-						{isRegisterMatch ? t("login.register") : t("login.login")}
-					</div>
+					<div className='ml-5 text-xl lg:text-2xl capitalize'>{isRegisterMatch ? t("login.register") : t("login.login")}</div>
 				</nav>
 			</div>
 		</header>

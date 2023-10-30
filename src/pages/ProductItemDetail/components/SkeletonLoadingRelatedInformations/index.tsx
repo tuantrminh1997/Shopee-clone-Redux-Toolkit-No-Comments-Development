@@ -8,10 +8,7 @@ export default function SkeletonLoadingRelatedInformations() {
 					<DefaultUserIcon className='m-auto' />
 				</div>
 			</div>
-			<div
-				role='status'
-				className='flex items-center justify-center h-[90%] w-[960px] bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700'
-			></div>
+			<div role='status' className='flex items-center justify-center h-[90%] w-[960px] bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700'></div>
 		</div>
 	);
 }

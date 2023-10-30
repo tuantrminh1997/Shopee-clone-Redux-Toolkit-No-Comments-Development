@@ -12,20 +12,14 @@ export default memo(function SetDate({ day, handleChangeDateSelection }: SetDate
 	const [toggleSelectDate, setToggleSelectDate] = useState<boolean>(false);
 
 	useEffect(() => {
-		// Thêm một sự kiện click toàn cục để kiểm tra sự kiện click ra ngoài
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const handleClickOutside = (event: any) => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			if (divRef.current && (!divRef.current as any).contains(event.target)) {
-				// Kiểm tra xem event.target không nằm trong phần tử divRef.current
 				setToggleSelectDate(false);
 			}
 		};
-
-		// Đăng ký sự kiện click toàn cục khi component được mount
 		document.addEventListener("click", handleClickOutside);
-
-		// Hủy đăng ký sự kiện khi component bị unmount
 		return () => {
 			document.removeEventListener("click", handleClickOutside);
 		};

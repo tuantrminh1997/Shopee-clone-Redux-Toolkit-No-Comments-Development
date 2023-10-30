@@ -1,12 +1,9 @@
 // material UI
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-// constants:
-import { cartTextAttributes } from "src/constants";
 // types:
 import { ShopingButtonsPropsType } from "src/types";
 
 export default function ShopingButtons({ handleAddToCart, handleBuyNow, addToCartTitle, buyNowTitle }: ShopingButtonsPropsType) {
-	const {} = cartTextAttributes;
 	return (
 		<div className='flex justify-start text-sm mb-8 lg:fixed lg:bottom-0 lg:left-0 lg:right-0 lg:justify-center lg:text-xl lg:z-50 lg:mb-0'>
 			<button

@@ -10,28 +10,17 @@ import { AnimatePresence, motion } from "framer-motion";
 // Chú ý: để tăng tính custome cho Component tái sử dụng, ta có thể tạo 1 props quản lý việc chuyển đổi giữa 1 vài thẻ html
 import { PopoverPropsType } from "src/types";
 
-// Trước mắt component Header dùng cho MainLayout -> Layout sau khi đăng nhập thành công
 export default function Popover({
-	// Prop chứa item quản lý Popover
 	hoverTarget,
-	// Prop chứa className của item quản lý Popover
 	hoverTargetclassName,
-	// Prop chứa className của mũi tên Popover
 	popoverArrowClassName,
-	// Item chứa Nội dung chính của popover
 	popoverContent,
-	// prop quản lý giá trị chuyển đổi qua lại giữa 1 vài thẻ html khác nhau
 	as: Element = "div",
-	// prop quản lý giá trị của isOpenPopover
 	initialOpenPopover,
-	// Prop offset -> dịch chuyển khối Popover xuống thêm ? px
 	offsetValue = -1,
-	// Prop quy định vị trí bị dồn về của Popover, bottom-end = dồn về dưới cùng, góc bên phải.
-	placementValue = "bottom-end", // State quản lý tắt/mở popover truyền từ ngoài vào
-	// Prop quản lý Popover dùng cho component nào ? giỏ hàng hay My Account Icon
+	placementValue = "bottom-end",
 	isCartComponent,
 }: PopoverPropsType) {
-	// handle mũi tên của tooltip - mũi tên nối giữa khối tooltip với item quản lý tooltip (Xem tại docs floating ui -> mục Arrow)
 	const arrowRef = useRef(null);
 
 	// object trả về của useFloating có property: reference -> truyền vào attribute ref của item mà khi hover vào đó sẽ showw tooltip
@@ -43,15 +32,12 @@ export default function Popover({
 			arrow({
 				element: arrowRef,
 			}),
-			// dịch cả khối tooltip xuống dưới 1 px
 			offset(offsetValue),
-			// handle chức năng dịch chuyển khối Popover theo hướng không bị màn hình che lấp
 			shift(),
 		],
 		placement: placementValue,
 	});
 
-	// method quản lý chức năng ẩn/hiện Popover
 	const handleShowPopover = () => {
 		setIsOpenPopover(true);
 	};
@@ -61,18 +47,10 @@ export default function Popover({
 	};
 
 	return (
-		<Element
-			className={hoverTargetclassName}
-			ref={refs.setReference}
-			onMouseEnter={handleShowPopover}
-			onMouseLeave={handleHidePopover}
-		>
-			{/* Khu vực chứa item quản lý Popover gồm 1 thẻ tiêu đề kẹp giữa 2 icons -> ta sẽ truyền vào dưỚi dạng children */}
+		<Element className={hoverTargetclassName} ref={refs.setReference} onMouseEnter={handleShowPopover} onMouseLeave={handleHidePopover}>
 			{hoverTarget}
 			<FloatingPortal>
 				<AnimatePresence>
-					{/* FramerMotion: AnimatePresence ôm toàn bộ khối tooltip và nằm trong FloatingPortal của FloatingUI. 
-                              motion.div thay thế cho thẻ div chứa khối tooltip */}
 					{isOpenPopover && (
 						<motion.div
 							className='relative z-[1000]'
@@ -83,25 +61,17 @@ export default function Popover({
 								left: x ?? 0,
 								top: y ?? 0,
 								width: "max-content",
-								// vị trí của toạ độ gốc animation
 								transformOrigin: `${middlewareData.arrow?.x}px top`,
 							}}
-							// Animation cho FramerMotion
 							initial={{ opacity: 0, transform: "scale(0)" }}
 							animate={{ opacity: 1, transform: "scale(1)" }}
 							exit={{ opacity: 0, transform: "scale(0)" }}
 							transition={{ duration: 0.2 }}
 						>
-							{/* Item Arrow cho tooltip */}
 							<span
 								ref={arrowRef}
-								// -translate-y-full = - (translate theo chiều y 100%) -> đẩy lên đỉnh của item cha
 								className={`border-x-transparent border-t-transparent border-b-white border-[11px] ${popoverArrowClassName} xl:hidden`}
 								style={{
-									// Style cho item mũi tên của tooltip -> xem tại trang chủ Floating UI -> Arrow -> click vào Arrow MiddleWare
-									// Chú ý: UI của mũi tên tooltip bị có đưỜng viền phần giao nhau giữa mũi tên và tooltip -> handle bằng cách
-									//        set z-index cho mũi tên đè lên tooltip, sau đó căn vị trí mũi tên che lấp lên tooltip
-									//        -> sau đó điều chỉnh translate-y sao cho mũi lên lùi xuống 1 chút để đè 1 chút lên tooltip
 									left: middlewareData.arrow?.x,
 									top: middlewareData.arrow?.y,
 									zIndex: 1,

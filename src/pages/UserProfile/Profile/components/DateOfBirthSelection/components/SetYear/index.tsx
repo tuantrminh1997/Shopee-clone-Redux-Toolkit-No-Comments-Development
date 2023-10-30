@@ -16,26 +16,16 @@ function SetYearInner({ handleChangeDateSelection, year }: SetDatePropsType) {
 	const [toggleSelectYear, setToggleSelectYear] = useState<boolean>(false);
 
 	useEffect(() => {
-		// Thêm một sự kiện click toàn cục để kiểm tra sự kiện click ra ngoài
 		const handleClickOutside = (event: any) => {
-			// Lỗi "Property 'contains' does not exist on type 'false'" xuất hiện vì TypeScript đang hiểu sai kiểu dữ liệu của divRef.current. Trong trường hợp này, bạn có thể
-			// giải quyết lỗi này bằng cách kiểm tra divRef.current trước khi sử dụng phương thức contains
 			if (
 				divRef.current &&
 				typeof (divRef.current as HTMLElement).contains === "function" &&
 				!(divRef.current as HTMLElement).contains(event.target)
 			) {
-				// Kiểm tra xem event.target không nằm trong phần tử divRef.current
 				setToggleSelectYear(false);
 			}
-			// Trong đoạn mã trên, chúng ta đã thêm kiểm tra typeof divRef.current.contains === 'function' để đảm bảo rằng divRef.current là một phần tử DOM và có phương thức
-			// contains. Điều này giúp tránh lỗi TypeScript và chạy mã mà không gặp vấn đề.
 		};
-
-		// Đăng ký sự kiện click toàn cục khi component được mount
 		document.addEventListener("click", handleClickOutside);
-
-		// Hủy đăng ký sự kiện khi component bị unmount
 		return () => {
 			document.removeEventListener("click", handleClickOutside);
 		};

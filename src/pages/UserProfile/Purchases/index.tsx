@@ -24,9 +24,6 @@ import { ExtendPurchaseSuccessResponse, RootState } from "src/types";
 import { Button, PurchaseItem } from "src/components";
 
 export default function Purchases() {
-	// React Context -> App Context
-	// isLoggedIn = Context API quản lý trạng thái đăng nhập: có accessToken lưu trong LocalStorage hay không ?
-	// userProfile được lấy từ Local Storage (lưu vào Local Storage nhờ Interceptor - Axios)
 	const isLoggedIn = useSelector((state: RootState) => state.authentication.isLoggedIn);
 	// constants:
 	const { allPurschases } = purchaseStatus;
@@ -38,26 +35,6 @@ export default function Purchases() {
 		if ((queryParams as any).status) return (queryParams as any).status;
 		return allPurschases;
 	}, [(queryParams as any).status]);
-
-	// Query quản lý tác vụ callAPI get purchase List -> nhận dữ liệu Các sản phẩm đang có trong cart -> truyền vào Component Cart -> đổ ra UI
-	// -> Query không bị gọi lại khi chuyển Page có cùng layout là MainLayout, do MainLayout khi đó chỉ bị re-render
-	// -> query này không bị inactive (query bị inactive khi component chứa nó bị unmunted hàon toàn -> khi đó query bắt đầu bị tính thời gian kể từ khi bị xoá)
-	// -> không cần thiết phải set staleTime là infinity (vô hạn)
-	// Chú ý: Khi component chứa query bị unmounted, thì React Query sẽ ngừng tính thời gian "stale" cho query đó. Nghĩa là nếu bạn mounted lại component và query đó được gọi lại, thời
-	// gian "stale" sẽ tính lại từ đầu, không tính tiếp từ thời điểm trước đó khi component bị unmounted.
-	// const { data: purchaseListQueryData } = useQuery({
-	// 	queryKey: ["purchaseList", { purchaseListStatus }],
-	// 	// Chú ý: sẽ phát sinh vấn đề khi thêm 1 sản phẩm vào giỏ hàng -> dữ liệu thêm mới trong giỏ hàng chưa được cập nhật và đổ ra UI
-	// 	// -> nguyên nhân: do khi kích hoạt sự kiện onClick -> thêm vào giỏ hàng -> call API -> cập nhật mới dữ liệu giỏ hàng trên Server và success
-	// 	queryFn: () => getPurchaseListApi({ status: purchaseListStatus as PurchaseListStatus }),
-	// 	keepPreviousData: true,
-	// 	// Sau khi logout và reload lại page -> component header được mounted lại và gọi API getPurchaseListApi, tuy nhiên do đã logout và không còn token trong localStorage
-	// 	// -> cuộc gọi API bị lỗi
-	// 	// -> fix các vấn đề:
-	// 	// 1. sau khi đã logout thì không còn sản phẩm nào trong giỏ hàng.
-	// 	// 2. đồng thời không call API getPurchaseListApi -> handle bằng cách sử dụng context isLoggedIn -> enabled khi isLoggedIn = truthy
-	// 	enabled: isLoggedIn,
-	// });
 	const appDispatch = useAppDispatch();
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -105,9 +82,6 @@ export default function Purchases() {
 					return (
 						<Button
 							key={status}
-							// purchases = /user/purchases
-							// create Search Params -> nối thêm params status=[status quy định trạng thái các đơn hàng (được server nhận diện và xử lý)]
-							// -> sử dụng hook useQueryConfig lấy các giá trị params trên url và gói vào object queryConfig -> gọi lên API và get List
 							to={{
 								pathname: purchases,
 								search: createSearchParams({ status: String(status) }).toString(),
@@ -133,13 +107,10 @@ export default function Purchases() {
 						{purchaseList?.map((purchaseItem, purchaseItemIndex) => {
 							const purchaseItemBuyCount = purchaseList?.find((_, index) => index === purchaseItemIndex)?.buy_count;
 							return (
-								// Sử dụng extendPurchaseItemIndex hoặc extendPurchaseItem._id làm key
 								<PurchaseItem
 									key={purchaseItemIndex} // Hoặc key={extendPurchaseItem._id}
-									// purchaseItem={purchaseItem}
 									extendPurchaseItem={purchaseItem as ExtendPurchaseSuccessResponse}
 									extendPurchaseItemIndex={purchaseItemIndex}
-									// sử dụng purchaseItemBuyCount  === purchaseItem.buy_count để so sánh với giá trị quantity nhập tay và xuất ra từ
 									purchaseItemBuyCount={purchaseItemBuyCount as number}
 								/>
 							);

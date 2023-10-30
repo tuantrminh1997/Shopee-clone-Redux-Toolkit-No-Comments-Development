@@ -7,8 +7,6 @@ export default function StarRating({ isAtProductDetailPage = false, rating, clas
 		if (index <= rating) {
 			return "100%";
 		} else if (index - rating < 1) {
-			// Math.floor = làm tròn xuống, ví dụ 3.4 -> 0.4
-			// để lấy phần thập phân của rating star -> rating - Math.floor(rating)
 			return `${(rating - Math.floor(rating)) * 100}%`;
 		} else {
 			return "0";

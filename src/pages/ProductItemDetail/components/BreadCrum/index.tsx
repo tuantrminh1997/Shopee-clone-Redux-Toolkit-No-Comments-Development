@@ -18,19 +18,15 @@ export default function BreadCrum({ productItemName, productItemCategory, catego
 	const queryConfig = useQueryConfig();
 
 	// Method quản lý sắp xếp theo Phổ biến, Mới nhất, Bán chạy
-	// -> ghi đè object queryConfig: + thuộc tính sort_by
 	const handleSortCategorySold: () => void = () => {
-		// Bắn khối url lên thanh url -> thu vào object queryConfig -> call API get List
 		navigate({
 			pathname: paths.defaultPath,
 			search: createSearchParams(
 				omit(
 					{
-						// Tiến hành ghi đè giá trị mới của thuộc tính sort_by trong object queryConfig bằng giá trị sortByValue được truyền vào
 						...queryConfig,
 						sort_by: "view",
 						category: categoryId,
-						// chuyển từ URLSearchParams sang string để phù hợp với giá trị mong muốn của thuộc tính search
 					},
 					["order"],
 				),
@@ -45,11 +41,7 @@ export default function BreadCrum({ productItemName, productItemCategory, catego
 			<span className='mr-2'>
 				<RightArrowBreadCrumIcon />
 			</span>
-			<span
-				onClick={handleSortCategorySold}
-				className='mr-2 capitalize cursor-pointer lg:min-w-[50px]'
-				aria-hidden='true'
-			>
+			<span onClick={handleSortCategorySold} className='mr-2 capitalize cursor-pointer lg:min-w-[50px]' aria-hidden='true'>
 				{productItemCategory}
 			</span>
 			<span className='mr-2'>

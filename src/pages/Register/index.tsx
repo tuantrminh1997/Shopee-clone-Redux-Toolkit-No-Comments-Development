@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 // lodash:
 import omit from "lodash/omit";
-// Sử dụng {Helmet} từ react helmet async thay vì { Helmet } từ react-helmet -> handle vấn đề báo lỗi ở console Using UNSAFE_componentWillMount ...v...v.....
 import { Helmet } from "react-helmet-async";
 // i18n
 import { useTranslation } from "react-i18next";
@@ -28,7 +27,6 @@ import { setIsLoggedInAction } from "src/slices/authenticationSlice";
 import { setCurrentUserProfileAction } from "src/slices/userProfileSlice";
 // thunk actions:
 import { registerThunkAction } from "src/thunkActions";
-// RTK Query hooks
 // common components:
 import { Input, Button } from "src/components";
 import { useAppDispatch } from "src/hooks";
@@ -38,7 +36,6 @@ export default function Register() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const appDispatch = useAppDispatch();
-	// data trong callback của handleSubmit sẽ có type = FormData
 	const {
 		register,
 		handleSubmit,
@@ -47,84 +44,44 @@ export default function Register() {
 	} = useForm<FormRulesSchema>({
 		resolver: yupResolver(formRulesSchema),
 	});
-	/**
-	 * Sử dụng hàm getFormRules return về kiểu FormRules ta đã định nghĩa
-	 * -> mục đích để có thể truyền hàm getValues vào, thay vì phải sử dụng spread operator
-	 */
-	// const formRules = getFormRules(getValues);
-	/**
-	 * -> Chuyển sang dùng Schema
-	 */
-
-	// React Query + Apis: Quản lý chức năng call API
-	// Mutation quản lý chức năng Register
-	// trạng thái loading khi register
 	const authenticationLoading = useSelector((state: RootState) => state.authentication.authenticationLoading);
 
 	// Method quản lý chức năng submit form
-	// handleSubmit: (onValid: SubmitHandler<FormData>, onInvalid?: SubmitErrorHandler<FormData> | undefined)
-	const onsubmit = handleSubmit(
-		// const {mutate} = registerAccountMutation;
-		// callback được truyền vào tham số thứ 1 của handleSubmit được gọi khi form đúng (nhập đầy đủ input, đúng định dạng từng
-		// input, ko có errors)
-		async (requestData) => {
-			/**
-			 * Chú ý: đối với tác vụ submit form, gửi data form lên server, nên đặt tên biến kiểu snake_case, vì đã số server sẽ sử dụng tên biến
-			 * kiểu snake_case -> ta đặt tên biến trong form data kiểu snake_case luôn cho tiện.
-			 */
-			// Ngắt thuộc tính confirm_password của data bằng lodash:
-			const registerData = omit(requestData, ["confirm_password"]);
-			/**
-       * Nếu dữ liệu hợp lệ theo schema validation (do Yup thực hiện), callback trong handleSubmit được gọi với đối số là data, chứa 
-       * dữ liệu đã nhập từ form.
-        -> Biến registerData được tạo để lưu trữ dữ liệu form (loại bỏ confirm_password).
-        -> Hàm mutate của registerAccountMutation được gọi với registerData như là tham số đầu tiên.
-       */
-
-			// Chú ý: nếu không unwrap -> không thể chạy xuống hàm catch()
-			await appDispatch(registerThunkAction(registerData))
-				.unwrap()
-				.then((data) => {
-					// sau khi register thành công
-					// 1. set isLogeedIn thành true
-					dispatch(setIsLoggedInAction(true));
-					// 2. trích xuất user profile từ then data và lưu vào userProfileSlice
-					const currentUserProfile = data.data?.user;
-					dispatch(setCurrentUserProfileAction(currentUserProfile));
-					// 3. toast thông báo lên
-					const successMessage = data.message;
-					toast.success(successMessage, {
-						position: "top-center",
-						autoClose: 2000,
-					});
-					// 4. điều hướng sang trang Product List
-					navigate("/");
-				})
-				.catch((error) => {
-					if (isUnprocessableEntityError<ErrorResponseApi<Omit<FormRulesSchema, "confirm_password">>>(error)) {
-						// Bắt lỗi 422 bằng typePredicate
-						const formError = error.data.data; // form = {email: string, password: string}
-						if (formError) {
-							Object.keys(formError).forEach((property) => {
-								// setError được sử dụng để lưu thông tin lỗi vào biến errors trong formState. Khi bạn gọi setError, React Hook Form sẽ cập
-								// nhật biến errors với thông tin lỗi mới, từ đó bạn có thể hiển thị lỗi lên giao diện người dùng.
-								setError(property as keyof Omit<FormRulesSchema, "confirm_password">, {
-									message: formError[property as keyof Omit<FormRulesSchema, "confirm_password">],
-									type: "ServerResponse",
-								});
-							});
-						}
-					}
+	const onsubmit = handleSubmit(async (requestData) => {
+		const registerData = omit(requestData, ["confirm_password"]);
+		await appDispatch(registerThunkAction(registerData))
+			.unwrap()
+			.then((data) => {
+				dispatch(setIsLoggedInAction(true));
+				const currentUserProfile = data.data?.user;
+				dispatch(setCurrentUserProfileAction(currentUserProfile));
+				const successMessage = data.message;
+				toast.success(successMessage, {
+					position: "top-center",
+					autoClose: 2000,
 				});
-		},
-	);
+				navigate("/");
+			})
+			.catch((error) => {
+				if (isUnprocessableEntityError<ErrorResponseApi<Omit<FormRulesSchema, "confirm_password">>>(error)) {
+					const formError = error.data.data;
+					if (formError) {
+						Object.keys(formError).forEach((property) => {
+							setError(property as keyof Omit<FormRulesSchema, "confirm_password">, {
+								message: formError[property as keyof Omit<FormRulesSchema, "confirm_password">],
+								type: "ServerResponse",
+							});
+						});
+					}
+				}
+			});
+	});
 
 	const { t } = useTranslation("loginRegister");
 	const { register: registerPath } = paths;
 	const pathname = useLocation().pathname;
 	const { changePassword } = paths;
 
-	// state quản lý trạng thái show/hive icon Eye:
 	const [openEyeIconMode, setOpenEyeIconMode] = useState<boolean>(false);
 	const handleToggleShowPassword: (openEyeIconMode: boolean) => void = (openEyeIconMode: boolean) => {
 		setOpenEyeIconMode(openEyeIconMode);
@@ -142,40 +99,6 @@ export default function Register() {
 					<div className='col-start-4 col-span-2 lg:col-start-1 lg:col-span-5 '>
 						<form className='p-10 rouned bg-white shadow-sm' onSubmit={onsubmit} noValidate>
 							<div className='text-2xl capitalize'>{t("register.register")}</div>
-							{/* 
-                * Chú ý: register("email") sẽ trả về thuộc tính name
-                -> cụ thể: ctrl + click chuột register -> để xem chi tiết cách định nghĩa thuộc tính register trong object trả về 
-                của useForm().
-                -> thuộc tính register có type UseFormRegister<TFieldValues>
-                -> type UseFormRegister<TFieldValues> được định nghĩa là 1 function, return về dữ liệu có type
-                là UseFormRegisterReturn<TFieldName>;
-                -> kiểu UseFormRegister<TFieldValues> được định nghĩa gồm các thuộc tính:
-                */
-							/**
-                 * onChange: ChangeHandler;
-                  onBlur: ChangeHandler;
-                  ref: RefCallBack;
-                  name: TFieldName;
-                  min?: string | number;
-                  max?: string | number;
-                  maxLength?: number;
-                  minLength?: number;
-                  pattern?: string;
-                  required?: boolean;
-                  disabled?: boolean;
-                */
-							/**
-                -> register() trả về 1 object có các thuộc tính email, giá trị = value thanh input.
-                function register() nhận vào tham số thứ 2 là 1 object, handle việc validate form
-                Sử dụng Register with validation and error message, xem thêm tại trang chủ React Hook Form
-                pattern email:
-
-                Chú ý: việc validate các rules trực tiếp sẽ gây rườm rà, trường hợp tổng quát khi ta có nhiều rules, sẽ càng rườm
-                rà
-                -> ý tưởng là khai báo 1 biến để kế thừa các rules lại.
-                Định nghĩa type cho formRules, formRules được truyền vào dưới dạng đối số thứ 2 của hàm register -> tra cứu type của tham
-                số thứ 2 của hàm register -> ctrl + click chuột
-              */}
 							<Input
 								classNameContainer={"mt-3"}
 								classNameError={"mt-1 text-red-600 min-h-[1.25rem] text-sm"}
@@ -184,16 +107,12 @@ export default function Register() {
 								placeholder={t("register.email")}
 								register={register}
 								formPropertyName='email'
-								/**
-								 * Sử dụng rule từ schema -> ko cần truyền formRules nữa
-								 */
 								errorMessage={errors.email?.message}
 							/>
 							<Input
 								classNameContainer={"mt-3"}
 								classNameError={"mt-1 text-red-600 min-h-[1.25rem] text-sm"}
 								classNameInput={"p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"}
-								// type='password'
 								autoComplete='on'
 								placeholder={t("register.password")}
 								register={register}
@@ -220,7 +139,6 @@ export default function Register() {
 							<div className='mt-3'>
 								<Button
 									className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600 flex items-center justify-center'
-									// prop isLoading, disabled được truyền khi mutation đang loading và đợi server trả response về.
 									isLoading={authenticationLoading}
 									disabled={authenticationLoading}
 								>
