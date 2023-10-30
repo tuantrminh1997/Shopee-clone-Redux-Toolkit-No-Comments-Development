@@ -15,7 +15,6 @@ export default function ProductItemImages({
 	productItemName,
 }: ProductItemImagesPropsType) {
 	console.log("productItemDetailDatasImage: ", productItemDetailDatasImage);
-
 	const { totalImageShownPositions } = productItemDetailInformationAttributes;
 	// Tổng vị trí các ảnh trong sliders
 	const imagesSliderPositions =

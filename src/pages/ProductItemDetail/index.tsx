@@ -52,25 +52,7 @@ export default function ProductItemDetail() {
 		const getProductItemDetailPromise = appDispatch(getProductItemDetailThunkAction(idFromNameId));
 		return () => getProductItemDetailPromise.abort();
 	}, [appDispatch, idFromNameId]);
-	const productItemDetailFromReducer = useSelector((state: RootState) => state.productItemDetail.productItemDetail);
-	const productItemDetail = useMemo(() => {
-		if (productItemDetailFromReducer) return productItemDetailFromReducer;
-	}, [productItemDetailFromReducer]);
-
-	// lưu giữ giá trị trước đó của ảnh đại diện sản phẩm
-	const previousProductItemImage = useRef<string | null>(null);
-
-	// previousProductItemImage.current = trỏ đến giá trị trước đó sau khi component được re-render và trả về tham chiếu mới
-	const productItemImage = useMemo(() => {
-		if (productItemDetail && productItemDetail.image !== previousProductItemImage.current) {
-			previousProductItemImage.current = productItemDetail.image;
-			return productItemDetail.image;
-		}
-	}, [productItemDetail]);
-	const forwardProductImage = useMemo(() => {
-		if (!productItemImage && previousProductItemImage.current) return previousProductItemImage.current;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [productItemImage, productItemDetail]);
+	const productItemDetail = useSelector((state: RootState) => state.productItemDetail.productItemDetail);
 
 	// trạng thái loading của get product item detail
 	const productItemDetailLoading = useSelector((state: RootState) => state.productItemDetail.productItemDetailLoading);
@@ -173,7 +155,7 @@ export default function ProductItemDetail() {
 			{!productItemDetailLoading && (
 				<div className='flex justify-between w-full bg-white rounded-sm lg:flex-col'>
 					<ProductItemImages
-						productItemDetailDatasImage={forwardProductImage as string}
+						productItemDetailDatasImage={productItemDetail?.image as string}
 						productItemDetailDatasImages={productItemDetail?.images as string[]}
 						productItemName={productItemDetail?.name as string}
 					/>
