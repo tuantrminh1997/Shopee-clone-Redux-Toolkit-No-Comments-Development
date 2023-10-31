@@ -1,5 +1,5 @@
 // react hooks:
-import { useState } from "react";
+import { useMemo,useState } from "react";
 // types
 import { ProductItemQuantityControllerPropsType } from "src/types";
 //icons:
@@ -56,6 +56,16 @@ export default function ProductItemQuantityController({
 		onFocusOut && onFocusOut(Number(event.target.value));
 	};
 
+  	// Biến quản lý trạng thái Disable nút tăng/giảm số lượng sản phẩm
+	const isDisableDecreaseButton = useMemo(() => {
+		if (value === 1) return true;
+		return false;
+	}, [value]);
+	const isDisableIncreaseButton = useMemo(() => {
+		if (value === maxQuantityAvailable) return true;
+		return false;
+	}, [value, maxQuantityAvailable]);
+
 	return (
 		<div className={`flex items-center ${classNameContainer}`}>
 			{itemNameId !== undefined && quantityControllerTitle && (
@@ -63,7 +73,11 @@ export default function ProductItemQuantityController({
 			)}
 			<div className='flex lowMobile:flex-col lowMobile:items-start'>
 				<div className={`flex ${classNameInnerDiv}`}>
-					<button className='flex px-2 py-1 border border-gray rounded-sm' onClick={handleDecrease}>
+        <button
+						className={`flex px-2 py-1 border border-gray rounded-sm ${isDisableDecreaseButton ? "cursor-not-allowed" : ""}`}
+						onClick={handleDecrease}
+						disabled={isDisableDecreaseButton}
+					>
 						<MinusIcon className='m-auto' />
 					</button>
 					<InputNumber
@@ -74,7 +88,11 @@ export default function ProductItemQuantityController({
 						onChange={handleChangeInput as (event: React.ChangeEvent<HTMLInputElement>) => void}
 						onBlur={handleFocusOut as (event: React.FocusEvent<HTMLInputElement, Element>) => void}
 					/>
-					<button className='flex px-2 py-1 border border-gray rounded-sm' onClick={handleIncrease as () => void}>
+					<button
+						className={`flex px-2 py-1 border border-gray rounded-sm ${isDisableIncreaseButton ? "cursor-not-allowed" : ""}`}
+						onClick={handleIncrease as () => void}
+						disabled={isDisableIncreaseButton}
+					>
 						<PlusIcon className='m-auto' />
 					</button>
 				</div>
